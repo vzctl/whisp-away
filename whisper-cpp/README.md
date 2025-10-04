@@ -1,0 +1,1 @@
+Nix derivations for whisper.cpp binaries.

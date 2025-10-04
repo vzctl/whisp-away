@@ -1,0 +1,45 @@
+# Model files - NEVER commit these!
+*.bin
+*.gguf
+*.ggml
+*.pt
+*.pth
+*.model
+*.onnx
+*.pb
+*.h5
+*.tflite
+*.mlmodel
+*.blob
+
+# Build directories
+/app/target/
+/whisper-rs/target/
+target/
+
+# Nix result symlinks
+result
+result-*
+
+# Rust/Cargo
+**/*.rs.bk
+*.pdb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OpenCL/OpenVINO cache files
+*.cl_cache
+**/*.cl_cache
+*cl_cache*
+
+# Benchmark logs and reports
+benchmark_ram_cache.log
+FINAL_PERFORMANCE_REPORT.md
+
+# Directories with non-printable characters (OpenVINO cache dirs)
+*[[:cntrl:]]*

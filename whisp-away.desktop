@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=WhispAway
+Comment=Voice dictation with Whisper
+Icon=audio-input-microphone
+Exec=whisp-away tray
+Terminal=false
+Categories=Utility;Audio;
+StartupNotify=false
+Hidden=false
+X-GNOME-Autostart-enabled=true
+X-KDE-autostart-after=panel
+X-MATE-Autostart-enabled=true
