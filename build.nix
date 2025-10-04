@@ -32,7 +32,7 @@ let
   };
   
   # Hardcode the whisper-rs hash for now
-  whisper-rs-hash = "sha256-jvSNc9SGiFpJbx9uJY4KF+TYa63YVhvA4gFngLLQp/0=";
+  whisper-rs-hash = "sha256-qiVEvz+Pj32bPBCuJGrTGc++yK35KbxJbEY6Fxqs2gk=";
 
   # The actual builder - same for both crane and rustPlatform
   buildPackage = if useCrane then craneLib.buildPackage else rustPlatform.buildRustPackage;
@@ -292,7 +292,7 @@ let
       outputHashes = {
         # Git dependencies need the hash of the unpacked git checkout
         # Use nix-prefetch-git to get this hash if it changes
-        "whisper-rs-0.15.1" = "sha256-NGbi1qKRC+A70k+Y5DYJOP75dgpcbTw7FqdCgMPmCjk=";
+        "whisper-rs-0.15.1" = whisper-rs-hash;
       };
     };
     
