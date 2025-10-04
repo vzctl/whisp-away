@@ -32,7 +32,7 @@ let
   };
   
   # Hardcode the whisper-rs hash for now
-  whisper-rs-hash = "sha256-jvSNc9SGiFpJbx9uJY4KF+TYa63YVhvA4gFngLLQp/0=";
+  whisper-rs-hash = "sha256-NGbi1qKRC+A70k+Y5DYJOP75dgpcbTw7FqdCgMPmCjk=";
 
   # The actual builder - same for both crane and rustPlatform
   buildPackage = if useCrane then craneLib.buildPackage else rustPlatform.buildRustPackage;
