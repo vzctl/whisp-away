@@ -10,7 +10,7 @@ libc = "0.2"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-whisper-rs = { git = "https://codeberg.org/madjinn/whisper-rs.git" }
+whisper-rs = { git = "https://codeberg.org/madjinn/whisper-rs.git", branch = "whisp-away" }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 ksni = "0.2"
