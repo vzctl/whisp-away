@@ -9,6 +9,41 @@ use std::path::Path;
 use std::process::{Child, Command, Stdio};
 use crate::helpers::{TrayState, write_tray_state};
 
+// Embed icon files
+const ICON_OFF: &[u8] = include_bytes!("../assets/mic-off.png");
+const ICON_ON: &[u8] = include_bytes!("../assets/mic-on.png");
+const ICON_PROCESSING: &[u8] = include_bytes!("../assets/mic-processing.png");
+
+// Convert PNG bytes to ARGB32 format (network byte order) for ksni
+fn png_to_argb32(png_bytes: &[u8]) -> Result<ksni::Icon> {
+    let img = image::load_from_memory(png_bytes)
+        .context("Failed to load PNG image")?
+        .to_rgba8();
+
+    let (width, height) = img.dimensions();
+    let mut argb_data = Vec::with_capacity((width * height * 4) as usize);
+
+    // Convert RGBA to ARGB32 in network byte order (big-endian)
+    for pixel in img.pixels() {
+        let r = pixel[0];
+        let g = pixel[1];
+        let b = pixel[2];
+        let a = pixel[3];
+
+        // ARGB in big-endian (network byte order)
+        argb_data.push(a);
+        argb_data.push(r);
+        argb_data.push(g);
+        argb_data.push(b);
+    }
+
+    Ok(ksni::Icon {
+        width: width as i32,
+        height: height as i32,
+        data: argb_data,
+    })
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct DaemonStatus {
     running: bool,
@@ -450,6 +485,25 @@ impl Tray for VoiceInputTray {
 
     fn icon_name(&self) -> String {
         self.get_icon_name()
+    }
+
+    fn icon_pixmap(&self) -> Vec<ksni::Icon> {
+        let status = self.status.lock().unwrap();
+        let icon_bytes = if !status.running {
+            ICON_OFF
+        } else if status.processing {
+            ICON_PROCESSING
+        } else {
+            ICON_ON
+        };
+
+        match png_to_argb32(icon_bytes) {
+            Ok(icon) => vec![icon],
+            Err(e) => {
+                eprintln!("Failed to load icon pixmap: {}", e);
+                vec![]
+            }
+        }
     }
 
     fn tool_tip(&self) -> ksni::ToolTip {

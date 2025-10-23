@@ -48,8 +48,17 @@ let
   commonAttrs = rec {
     pname = "whisp-away";
     version = "0.1.0";
-    
-    src = ./.;
+
+    src = if useCrane then
+      lib.cleanSourceWith {
+        src = craneLib.path ./.;
+        filter = path: type:
+          (craneLib.filterCargoSources path type) ||
+          (lib.hasSuffix "/assets" path) ||
+          (lib.hasInfix "/assets/" path);
+      }
+    else
+      ./.;
     
     # Enable features based on acceleration type
     buildFeatures = lib.optionals (accelerationType == "vulkan") [ "vulkan" ]
@@ -294,7 +303,13 @@ let
     
     # Crane uses cargoVendorDir instead of cargoLock
     cargoVendorDir = craneLib.vendorCargoDeps {
-      src = craneLib.cleanCargoSource ./.;
+      src = lib.cleanSourceWith {
+        src = craneLib.path ./.;
+        filter = path: type:
+          (craneLib.filterCargoSources path type) ||
+          (lib.hasSuffix "/assets" path) ||
+          (lib.hasInfix "/assets/" path);
+      };
       cargoLock = ./Cargo.lock;
       outputHashes = {
         # Git dependencies need the hash of the unpacked git checkout
